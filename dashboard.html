@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Management - Dashboard</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold" href="#">Eugenio Bistro Operations</a>
+                <div class="d-flex align-items-center">
+                    <span class="text-white me-3" id="userName">Welcome, Manager</span>
+                    <button class="btn btn-outline-light btn-sm" id="logoutBtn">Logout</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block bg-white sidebar py-3 border-end">
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2">
+                        <a class="nav-link active fw-bold" href="#">Live Orders</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link text-dark" href="#">Menu Items</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link text-dark" href="#">Table Reservation</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link text-dark" href="#">Sales Summary</a>
+                    </li>
+                </ul>
+            </nav>
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                
+                <!-- Greeting Header -->
+                <div class="pb-2 mb-4 border-bottom">
+                    <h2 id="greeting">Welcome to Eugenio Bistro!</h2>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="card text-center shadow-sm">
+                            <div class="card-body">
+                                <h6 class="text-muted" id="stat1-title">Total Orders Today</h6>
+                                <h3 class="fw-bold text-primary" id="stat1-value">0</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <div class="card text-center shadow-sm">
+                            <div class="card-body">
+                                <h6 class="text-muted" id="stat2-title">Today's Revenue</h6>
+                                <h3 class="fw-bold text-success" id="stat2-value">0</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <div class="card text-center shadow-sm">
+                            <div class="card-body">
+                                <h6 class="text-muted" id="stat3-title">Pending Orders</h6>
+                                <h3 class="fw-bold text-danger" id="stat3-value">0</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <div class="card text-center shadow-sm">
+                            <div class="card-body">
+                                <h6 class="text-muted" id="stat4-title">Tables Occupied</h6>
+                                <h3 class="fw-bold text-warning" id="stat4-value">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Add New Dining Order</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="addOrderForm" class="row g-3">
+                            <div class="col-md-2">
+                                <label for="tableName" class="form-label">Table No.</label>
+                                <input type="text" class="form-control" id="tableName" placeholder="e.g. Table 05" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="customerName" class="form-label">Customer / Staff</label>
+                                <input type="text" class="form-control" id="customerName" placeholder="e.g. Walk-in" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="orderItems" class="form-label">Ordered Items</label>
+                                <input type="text" class="form-control" id="orderItems" placeholder="e.g. 1x Pasta, 1x Juice" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="totalBill" class="form-label">Total Bill (₱)</label>
+                                <input type="text" class="form-control" id="totalBill" placeholder="e.g. ₱450" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="orderStatus" class="form-label">Status</label>
+                                <select class="form-select" id="orderStatus">
+                                    <option value="Pending">Pending</option>
+                                    <option value="Preparing">Preparing</option>
+                                    <option value="Served">Served</option>
+                                </select>
+                            </div>
+                            <div class="col-12 text-end">
+                                <button type="button" class="btn btn-primary" id="addOrderBtn">+ Add Order to List</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Current Dining Orders</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-striped align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Table No.</th>
+                                        <th>Customer / Staff</th>
+                                        <th>Ordered Items</th>
+                                        <th>Total Bill</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="orderTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

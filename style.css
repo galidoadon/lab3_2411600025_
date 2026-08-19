@@ -1,0 +1,32 @@
+
+:root {
+    --bs-primary: #8b0000;
+    --bs-secondary: #a52a2a;
+    --theme-bg: #fdfbf7;
+    --theme-text: #2b2b2b;
+}
+
+body {
+    background-color: var(--theme-bg);
+    color: var(--theme-text);
+}
+
+.btn-primary {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--bs-secondary);
+    border-color: var(--bs-secondary);
+}
+
+.sidebar {
+    min-height: calc(100vh - 56px);
+}
+
+.sidebar .nav-link.active {
+    background-color: #8b0000;
+    color: white !important;
+    border-radius: 5px;
+}
