@@ -6,6 +6,10 @@
     --theme-text: #2b2b2b;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     background-color: var(--theme-bg);
     color: var(--theme-text);
@@ -29,4 +33,25 @@ body {
     background-color: #8b0000;
     color: white !important;
     border-radius: 5px;
+}
+
+#cartItems {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+#totalBill {
+    font-weight: 600;
+    background-color: #fff;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }

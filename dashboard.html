@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restaurant Management - Dashboard</title>
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container-fluid">
@@ -27,26 +25,26 @@
             <nav class="col-md-3 col-lg-2 d-md-block bg-white sidebar py-3 border-end">
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2">
-                        <a class="nav-link active fw-bold" href="#">Live Orders</a>
+                        <a class="nav-link active fw-bold" href="#live-orders">Live Orders</a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a class="nav-link text-dark" href="#">Menu Items</a>
+                        <a class="nav-link text-dark" href="#menu-items">Menu Items</a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a class="nav-link text-dark" href="#">Table Reservation</a>
+                        <a class="nav-link text-dark" href="#table-reservation">Table Reservation</a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a class="nav-link text-dark" href="#">Sales Summary</a>
+                        <a class="nav-link text-dark" href="#sales-summary">Sales Summary</a>
                     </li>
                 </ul>
             </nav>
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-                
-                <!-- Greeting Header -->
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4" id="live-orders">
                 <div class="pb-2 mb-4 border-bottom">
                     <h2 id="greeting">Welcome to Eugenio Bistro!</h2>
                 </div>
-                <div class="row mb-4">
+
+                <div class="row mb-4" id="sales-summary">
                     <div class="col-md-3 mb-3">
                         <div class="card text-center shadow-sm">
                             <div class="card-body">
@@ -55,16 +53,14 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-3 mb-3">
                         <div class="card text-center shadow-sm">
                             <div class="card-body">
                                 <h6 class="text-muted" id="stat2-title">Today's Revenue</h6>
-                                <h3 class="fw-bold text-success" id="stat2-value">0</h3>
+                                <h3 class="fw-bold text-success" id="stat2-value">₱0</h3>
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-3 mb-3">
                         <div class="card text-center shadow-sm">
                             <div class="card-body">
@@ -73,7 +69,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-3 mb-3">
                         <div class="card text-center shadow-sm">
                             <div class="card-body">
@@ -84,7 +79,15 @@
                     </div>
                 </div>
 
-                
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white border-bottom">
+                        <h5 class="mb-0">Product Overview</h5>
+                    </div>
+                    <div class="card-body" style="height: 320px;">
+                        <canvas id="productStockChart"></canvas>
+                    </div>
+                </div>
+
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">Add New Dining Order</h5>
@@ -92,35 +95,150 @@
                     <div class="card-body">
                         <form id="addOrderForm" class="row g-3">
                             <div class="col-md-2">
+                                <label for="orderType" class="form-label">Order Type</label>
+                                <select class="form-select" id="orderType">
+                                    <option value="Dine In">Dine In</option>
+                                    <option value="Take Out">Take Out</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
                                 <label for="tableName" class="form-label">Table No.</label>
-                                <input type="text" class="form-control" id="tableName" placeholder="e.g. Table 05" required>
+                                <input type="text" class="form-control" id="tableName" placeholder="Table 05" required>
                             </div>
                             <div class="col-md-3">
                                 <label for="customerName" class="form-label">Customer / Staff</label>
-                                <input type="text" class="form-control" id="customerName" placeholder="e.g. Walk-in" required>
+                                <input type="text" class="form-control" id="customerName" placeholder="Walk-in" required>
                             </div>
                             <div class="col-md-3">
-                                <label for="orderItems" class="form-label">Ordered Items</label>
-                                <input type="text" class="form-control" id="orderItems" placeholder="e.g. 1x Pasta, 1x Juice" required>
+                                <label for="productSelect" class="form-label">Ordered Items</label>
+                                <select class="form-select" id="productSelect"></select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="quantityInput" class="form-label">Quantity</label>
+                                <input type="number" class="form-control" id="quantityInput" min="1" value="1">
                             </div>
                             <div class="col-md-2">
                                 <label for="totalBill" class="form-label">Total Bill (₱)</label>
-                                <input type="text" class="form-control" id="totalBill" placeholder="e.g. ₱450" required>
+                                <input type="text" class="form-control" id="totalBill" readonly placeholder="">
+                            </div>
+                            <div class="col-12 text-end d-flex justify-content-end gap-2 flex-wrap">
+                                <button type="button" class="btn btn-outline-primary" id="addToCartBtn">Add to Cart</button>
+                                <button type="button" class="btn btn-primary" id="addOrderBtn">Place Order</button>
+                            </div>
+                        </form>
+
+                        <div class="mt-4 border rounded p-3 bg-light">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="mb-0 fw-bold">Cart</h6>
+                                <span class="badge bg-secondary" id="cartCount">0 items</span>
+                            </div>
+                            <div id="cartItems" class="small text-muted">No items added yet.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4" id="menu-items">
+                    <div class="col-lg-6">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-white border-bottom">
+                                <h5 class="mb-0">Add New Product to Menu</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="addProductForm" class="row g-3">
+                                    <div class="col-md-5">
+                                        <label for="newProductName" class="form-label">Product Name</label>
+                                        <input type="text" class="form-control" id="newProductName" placeholder="" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="newProductPrice" class="form-label">Price</label>
+                                        <input type="number" class="form-control" id="newProductPrice" min="1" placeholder="" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="newProductStock" class="form-label">Stock</label>
+                                        <input type="number" class="form-control" id="newProductStock" min="0" value="0">
+                                    </div>
+                                    <div class="col-md-2 d-flex align-items-end">
+                                        <button type="button" class="btn btn-primary w-100" id="addProductBtn">Add</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-white border-bottom">
+                                <h5 class="mb-0">Add Stock to Inventory</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="stockRestockForm" class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="restockProductSelect" class="form-label">Product</label>
+                                        <select class="form-select" id="restockProductSelect"></select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="restockQuantity" class="form-label">Quantity to Add</label>
+                                        <input type="number" class="form-control" id="restockQuantity" min="1" value="10">
+                                    </div>
+                                    <div class="col-md-2 d-flex align-items-end">
+                                        <button type="button" class="btn btn-success w-100" id="restockBtn">Add</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm mb-4" id="table-reservation">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Reservation Schedule</h5>
+                    </div>
+                    <div class="card-body border-bottom">
+                        <form id="reservationForm" class="row g-3">
+                            <div class="col-md-3">
+                                <label for="reservationCustomer" class="form-label">Customer Name</label>
+                                <input type="text" class="form-control" id="reservationCustomer" placeholder="Customer name" required>
                             </div>
                             <div class="col-md-2">
-                                <label for="orderStatus" class="form-label">Status</label>
-                                <select class="form-select" id="orderStatus">
-                                    <option value="Pending">Pending</option>
-                                    <option value="Preparing">Preparing</option>
-                                    <option value="Served">Served</option>
-                                </select>
+                                <label for="reservationDate" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="reservationDate" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="reservationTime" class="form-label">Time</label>
+                                <input type="time" class="form-control" id="reservationTime" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="reservationGuests" class="form-label">Guests</label>
+                                <input type="number" class="form-control" id="reservationGuests" min="1" value="2" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="reservationTable" class="form-label">Table</label>
+                                <input type="text" class="form-control" id="reservationTable" placeholder="Table 05" required>
                             </div>
                             <div class="col-12 text-end">
-                                <button type="button" class="btn btn-primary" id="addOrderBtn">+ Add Order to List</button>
+                                <button type="button" class="btn btn-primary" id="addReservationBtn">Add Reservation</button>
                             </div>
                         </form>
                     </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-striped align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Customer</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Guests</th>
+                                        <th>Table</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reservationTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="card shadow-sm">
                     <div class="card-header bg-white">
                         <h5 class="mb-0">Current Dining Orders</h5>
@@ -135,19 +253,20 @@
                                         <th>Ordered Items</th>
                                         <th>Total Bill</th>
                                         <th>Status</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody id="orderTableBody">
-                                </tbody>
+                                <tbody id="orderTableBody"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-
             </main>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     <script src="dashboard.js"></script>
 </body>
 </html>

@@ -2,17 +2,23 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     var loginBtn = document.getElementById('loginBtn');
+    var loginForm = document.getElementById('loginForm');
     var usernameInput = document.getElementById('username');
     var passwordInput = document.getElementById('password');
     var feedbackDiv = document.getElementById('loginFeedback');
 
     if (localStorage.getItem('isLoggedIn') === 'true') {
         window.location.href = 'dashboard.html';
+        return;
     }
 
-    loginBtn.addEventListener('click', function() {
-        var username = usernameInput.value;
-        var password = passwordInput.value;
+    function handleLogin(event) {
+        if (event) {
+            event.preventDefault();
+        }
+
+        var username = (usernameInput.value || '').trim();
+        var password = (passwordInput.value || '').trim();
 
         if (username === '' || password === '') {
             feedbackDiv.innerHTML = '<div class="alert alert-danger">Please enter both username and password.</div>';
@@ -31,5 +37,8 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             feedbackDiv.innerHTML = '<div class="alert alert-danger">Invalid username or password.</div>';
         }
-    });
+    }
+
+    loginBtn.addEventListener('click', handleLogin);
+    loginForm.addEventListener('submit', handleLogin);
 });
